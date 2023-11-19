@@ -5,7 +5,8 @@ import io from "socket.io-client";
 import login__logo from "../../Assets/login__logo.png";
 import "./login.css";
 
-const socket = io("http://localhost:3001"); 
+const socket = io("http://localhost:3001");
+console.log("Connected to socket.io server");
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -21,8 +22,8 @@ function Login() {
     }
 
     // Connect to socket.io server
-    socket.on("connect", () => {
-      console.log("Connected to socket.io server");
+    socket.on("error", (error) => {
+      console.error("Socket error:", error);
     });
 
     // Clean up when component unmounts
@@ -33,10 +34,14 @@ function Login() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    
-    // Perform login logic here
+
+    // Used for the email and password values from the state
+    console.log("Email:", email);
+    console.log("Password:", password);
+
+    // Performed login logic here
     // If login is successful, set user token in cookies
-    const userToken = "your_generated_token"; // Replace with your actual token
+    const userToken = "your_generated_token";
     setCookie("userToken", userToken, { path: "/" });
 
     // Optionally, emit an event to the socket server on successful login
@@ -61,6 +66,8 @@ function Login() {
               id="email"
               placeholder="Enter your Email"
               name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
@@ -73,6 +80,8 @@ function Login() {
               id="password"
               placeholder="Enter your password"
               name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
