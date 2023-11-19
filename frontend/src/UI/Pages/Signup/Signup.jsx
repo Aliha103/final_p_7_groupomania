@@ -1,28 +1,50 @@
-// Signup.jsx
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import io from "socket.io-client";
 import login__logo from "../../Assets/login__logo.png";
 import "./Signup.css";
 
-const socket = io("http://localhost:3001");
-
-function Signup() {
-  const [firstname, setFirstname] = useState("");
-  const [lastname, setLastname] = useState("");
-  const [email, setEmail] = useState("");
+const SignUp = () => {
+  const [firstname, setfirstname] = useState("");
+  const [lastname, setlastname] = useState("");
+  const [email, setemail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSignup = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-    // Performing signup logic here
+    if (firstname.trim() === "") {
+      console.error("First Name is required.");
+      // Optionally, display an error message to the user.
+      return;
+    }
 
-    // Emit an event to the socket server on successful signup
-    socket.emit("signup", { firstname, lastname, email, password });
+    const userData = {
+      firstname,
+      lastname,
+      email,
+      password,
+    };
 
-    // Redirect to another page or perform any other action
-    console.log("Signup successful");
+    try {
+      const response = await fetch("http://localhost:8000/user/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (response.ok) {
+        // Handle a successful sign-up response here
+        console.log("Sign-up successful");
+      } else {
+        // Handle an error response from your backend
+        const data = await response.json();
+        console.error("Sign-up failed:", data.error);
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
   };
 
   return (
@@ -30,7 +52,7 @@ function Signup() {
       <img className="signup__logo" src={login__logo} alt="Groupomania logo" />
       <div className="signup_detail">
         <h1 className="signup_form_title"> Sign up </h1>
-        <form onSubmit={handleSignup}>
+        <form onSubmit={handleSubmit}>
           <div className="firstname_section">
             <label htmlFor="firstname">First Name</label>
             <input
@@ -39,7 +61,7 @@ function Signup() {
               placeholder="Enter your First Name"
               name="firstname"
               value={firstname}
-              onChange={(e) => setFirstname(e.target.value)}
+              onChange={(e) => setfirstname(e.target.value)}
               required
             />
           </div>
@@ -51,7 +73,7 @@ function Signup() {
               placeholder="Enter your Last Name"
               name="lastname"
               value={lastname}
-              onChange={(e) => setLastname(e.target.value)}
+              onChange={(e) => setlastname(e.target.value)}
               required
             />
           </div>
@@ -63,7 +85,7 @@ function Signup() {
               placeholder="Enter your Email"
               name="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setemail(e.target.value)}
               required
             />
           </div>
@@ -92,6 +114,6 @@ function Signup() {
       </div>
     </div>
   );
-}
+};
 
-export default Signup;
+export default SignUp;

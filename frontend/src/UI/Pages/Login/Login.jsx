@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import io from "socket.io-client";
 import login__logo from "../../Assets/login__logo.png";
 import "./login.css";
-
-const socket = io("http://localhost:3001");
-console.log("Connected to socket.io server");
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [cookies, setCookie] = useCookies(["userToken"]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Check if user is already authenticated
@@ -20,35 +17,38 @@ function Login() {
       // Redirect to authenticated route or perform any other action
       console.log("User is already authenticated:", userToken);
     }
-
-    // Connect to socket.io server
-    socket.on("error", (error) => {
-      console.error("Socket error:", error);
-    });
-
-    // Clean up when component unmounts
-    return () => {
-      socket.disconnect();
-    };
   }, [cookies.userToken]);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    // Used for the email and password values from the state
+    // Log email and password values
     console.log("Email:", email);
     console.log("Password:", password);
 
-    // Performed login logic here
-    // If login is successful, set user token in cookies
-    const userToken = "your_generated_token";
-    setCookie("userToken", userToken, { path: "/" });
+    // Make an API call to your server-side script
+    const response = await fetch("http://localhost:8000/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
 
-    // Optionally, emit an event to the socket server on successful login
-    socket.emit("login", { userToken });
+    // Handle the response
+    if (response.ok) {
+      const data = await response.json();
+      const userToken = data.token; // Assuming your server returns a token
 
-    // Redirect to authenticated route or perform any other action
-    console.log("Login successful");
+      // Set user token in cookies
+      setCookie("userToken", userToken, { path: "/" });
+
+      // Log successful login
+      console.log("Login successful");
+      navigate("/home");
+    } else {
+      console.error("Login failed");
+    }
   };
 
   return (
@@ -87,7 +87,7 @@ function Login() {
           </div>
           <div className="forgot_password">
             Forgot Password?
-            <a href="#" role="button">
+            <a href="/Signup" role="button">
               Click here
             </a>
           </div>
@@ -98,7 +98,7 @@ function Login() {
               Login{" "}
             </button>
             <p className="signup_link"> Don't have an account? </p>
-            <Link to="/Signup" className="btn btn-secondary">
+            <Link to="/signup" className="btn btn-secondary">
               Sign Up
             </Link>
           </div>
