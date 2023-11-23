@@ -1,0 +1,7 @@
+.feedPost_main{
+    display: flex;
+    border: 5px solid #000000;
+    height: 500px;
+    width: 50% !important;
+
+}

@@ -1,53 +1,51 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
 import login__logo from "../../Assets/login__logo.png";
 import "./login.css";
 
-function Login() {
+const LogIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [cookies, setCookie] = useCookies(["userToken"]);
+  const [notification, setNotification] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // Check if user is already authenticated
-    const userToken = cookies.userToken;
-    if (userToken) {
-      // Redirect to authenticated route or perform any other action
-      console.log("User is already authenticated:", userToken);
+  const handleLogin = async (event) => {
+    event.preventDefault();
+
+    if (email.trim() === "" || password.trim() === "") {
+      setNotification("Email and password are required.");
+      return;
     }
-  }, [cookies.userToken]);
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+    try {
+      const response = await fetch("http://localhost:8000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-    // Log email and password values
-    console.log("Email:", email);
-    console.log("Password:", password);
+      console.log("Response from server:", response);
 
-    // Make an API call to your server-side script
-    const response = await fetch("http://localhost:8000/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
-
-    // Handle the response
-    if (response.ok) {
-      const data = await response.json();
-      const userToken = data.token; // Assuming your server returns a token
-
-      // Set user token in cookies
-      setCookie("userToken", userToken, { path: "/" });
-
-      // Log successful login
-      console.log("Login successful");
-      navigate("/home");
-    } else {
-      console.error("Login failed");
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userEmail", data.user.email);
+        localStorage.setItem("firstname", data.user.firstname); // Store the user's first name
+        localStorage.setItem("lastname", data.user.lastname); // Store the user's last name
+        setNotification("Login successful");
+        console.log("Login successful");
+        navigate("/home");
+      } else {
+        const data = await response.json();
+        setNotification(data.error || "Email or Password not found");
+        console.error("Login failed:", data.error);
+      }
+    } catch (error) {
+      setNotification("An error occurred");
+      console.error("An error occurred:", error.message);
     }
   };
 
@@ -58,9 +56,7 @@ function Login() {
         <h1 className="login_form_title"> Login </h1>
         <form onSubmit={handleLogin}>
           <div className="email_section">
-            {/* label for the input */}
             <label htmlFor="email">Email</label>
-            {/* Input element without text content */}
             <input
               type="text"
               id="email"
@@ -72,9 +68,7 @@ function Login() {
             />
           </div>
           <div className="password_section">
-            {/* label for the input */}
             <label htmlFor="password">Password</label>
-            {/* Input element without text content */}
             <input
               type="password"
               id="password"
@@ -85,11 +79,17 @@ function Login() {
               required
             />
           </div>
+
+          {/* Display notification message if present */}
+          {notification && (
+            <p className="notification_message">{notification}</p>
+          )}
+
           <div className="forgot_password">
             Forgot Password?
-            <a href="/Signup" role="button">
+            <Link to="/signup" role="button">
               Click here
-            </a>
+            </Link>
           </div>
 
           <div className="form_submit_btn">
@@ -106,6 +106,6 @@ function Login() {
       </div>
     </div>
   );
-}
+};
 
-export default Login;
+export default LogIn;

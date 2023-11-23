@@ -1,5 +1,4 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const compression = require("compression");
 const helmet = require("helmet");
@@ -11,6 +10,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const app = express();
 const db = require("./db"); // Import the SQLite database connection
+const postRoutes = require("./routes/postRoute");
 
 app.use(express.json());
 const cors = require("cors");
@@ -160,7 +160,7 @@ app.post("/login", (req, res, next) => {
       }
 
       // Authentication successful, create a JWT
-      const token = jwt.sign({ userId: row.id }, "your-secret-key", {
+      const token = jwt.sign({ userId: row.id }, "Sp08bce011", {
         expiresIn: "24h",
       });
 
@@ -275,6 +275,146 @@ app.delete("/user/:id", (req, res, next) => {
       res.json({ message: "deleted", changes: this.changes });
     }
   );
+});
+
+app.use("/posts", postRoutes);
+
+// Create a new post
+// app.post("/posts", async (req, res) => {
+//   const { title, content, userId } = req.body;
+//   console.log(req.body);
+
+//   // Validate input
+//   if (!title || !content || !userId) {
+//     return res
+//       .status(400)
+//       .json({ error: "Title, content, and userId are required." });
+//   }
+
+//   // Fetch user information from the database based on userId
+//   const selectUserSQL = "SELECT firstname, lastname FROM user WHERE id = ?";
+//   const userParams = [userId];
+
+//   db.get(selectUserSQL, userParams, (userErr, userRow) => {
+//     if (userErr) {
+//       return res.status(500).json({ error: userErr.message });
+//     }
+
+//     if (!userRow) {
+//       return res.status(404).json({ error: "User not found" });
+//     }
+
+//     // Insert new post into the database
+//     const insertPostSQL =
+//       "INSERT INTO post (title, content, userId) VALUES (?, ?, ?)";
+//     const postParams = [
+//       `${userRow.firstname} ${userRow.lastname}`,
+//       content,
+//       userId,
+//     ];
+
+//     db.run(insertPostSQL, postParams, function (postErr, result) {
+//       if (postErr) {
+//         return res.status(500).json({ error: postErr.message });
+//       }
+
+//       res.json({
+//         message: "Post created successfully",
+//         data: {
+//           id: this.lastID,
+//           title: `${userRow.firstname} ${userRow.lastname}`,
+//           content,
+//           userId,
+//         },
+//       });
+//     });
+//   });
+// });
+
+// Get all posts
+app.get("/posts", (req, res) => {
+  const selectSQL = "SELECT * FROM post";
+
+  db.all(selectSQL, [], (err, rows) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+
+    res.json({
+      message: "Success",
+      data: rows,
+    });
+  });
+});
+
+// Get a specific post by ID
+app.get("/posts/:id", (req, res) => {
+  const selectSQL = "SELECT * FROM post WHERE id = ?";
+  const params = [req.params.id];
+
+  db.get(selectSQL, params, (err, row) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+
+    if (!row) {
+      return res.status(404).json({ error: "Post not found" });
+    }
+
+    res.json({
+      message: "Success",
+      data: row,
+    });
+  });
+});
+
+// Update a post by ID
+app.patch("/posts/:id", (req, res) => {
+  const { title, content, userId } = req.body;
+  const updateSQL =
+    "UPDATE post SET title = ?, content = ?, userId = ? WHERE id = ?";
+  const params = [title, content, userId, req.params.id];
+
+  db.run(updateSQL, params, function (err, result) {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+
+    if (this.changes === 0) {
+      return res.status(404).json({ error: "Post not found" });
+    }
+
+    res.json({
+      message: "Post updated successfully",
+      data: {
+        id: req.params.id,
+        title,
+        content,
+        userId,
+      },
+    });
+  });
+});
+
+// Delete a post by ID
+app.delete("/posts/:id", (req, res) => {
+  const deleteSQL = "DELETE FROM post WHERE id = ?";
+  const params = [req.params.id];
+
+  db.run(deleteSQL, params, function (err, result) {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+
+    if (this.changes === 0) {
+      return res.status(404).json({ error: "Post not found" });
+    }
+
+    res.json({
+      message: "Post deleted successfully",
+      changes: this.changes,
+    });
+  });
 });
 
 module.exports = app;

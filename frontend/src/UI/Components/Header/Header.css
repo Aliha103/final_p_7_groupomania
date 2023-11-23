@@ -12,25 +12,27 @@
   cursor: pointer;
 }
 
-.searchBar {
+.header_searchBar {
   display: flex;
-  width: 22%;
+  width: 20%;
   height: 45px;
   background-color: white;
   border-radius: 70px;
   align-items: center;
 }
-.searchInput {
-  width: 80%;
-  height: 38px;
+.header_searchInput {
+  width:90%;
+  height: 20px !important;
   border-radius: 70px;
-  font-size: larger;
+  font-size: large;
   align-items: center;
   justify-content: center;
-  margin-left: 4%;
   border: none !important;
+  margin-bottom: 2%;
+
+
 }
-.searchInput:focus {
+.header_searchInput:focus {
   outline: none !important;
 }
 

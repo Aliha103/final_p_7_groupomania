@@ -76,7 +76,7 @@ exports.login = (req, res) => {
           }
 
           // Authentication successful, create a JWT token
-          const token = jwt.sign({ userId: user._id }, "your-secret-key", {
+          const token = jwt.sign({ userId: user._id }, "Sp08bce011", {
             expiresIn: "24h",
           });
 
