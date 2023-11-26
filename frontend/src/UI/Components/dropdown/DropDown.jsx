@@ -11,7 +11,7 @@ const App = () => {
   const navigate = useNavigate();
   const user = {
     firstname: localStorage.getItem("firstname"),
-    Id: localStorage.getItem("id"),
+    Id: localStorage.getItem("userId"),
     lastname: localStorage.getItem("lastname"),
     email: localStorage.getItem("email"),
   };
@@ -31,7 +31,10 @@ const App = () => {
 
   const handleMenuClick = (e) => {
     if (e.key === "5") {
-      // Show confirmation dialog before deleting the account
+      // Clear the user context and navigate to the login page
+      localStorage.clear();
+      navigate("/login", { replace: true });
+    } else if (e.key === "6") {
       showDeleteConfirmation();
     }
   };
@@ -91,7 +94,6 @@ const App = () => {
       key: "6",
       icon: <PoweroffOutlined className="custom-icon" />,
       danger: true,
-      onClick: showDeleteConfirmation,
     },
   ];
 

@@ -34,7 +34,7 @@ const LogIn = () => {
         localStorage.setItem("lastname", data.user.lastname);
         localStorage.setItem("email", data.user.email);
         localStorage.setItem("token", data.token);
-        localStorage.setItem("userId", data.user.id);
+        localStorage.setItem("userId", data.user.userId);
         // Navigate to HomePage
         navigate("/home");
         console.log("Sign-up successful");
