@@ -3,10 +3,12 @@ import React, { useState, useEffect } from "react";
 const FeedComponent = () => {
   const [feedPosts, setFeedPosts] = useState([]);
   const [newPostText, setNewPostText] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
+  const apiBaseUrl = "http://localhost:8000/api/posts";
 
   const fetchFeedPosts = async () => {
     try {
-      const response = await fetch("http://localhost:8000/posts");
+      const response = await fetch(`${apiBaseUrl}`);
       if (!response.ok) {
         console.error(`Error fetching feed posts: ${response.statusText}`);
         return;
@@ -26,19 +28,22 @@ const FeedComponent = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:8000/posts", {
+      const formData = new FormData();
+      formData.append("text", newPostText);
+      formData.append("image", selectedFile);
+
+      const response = await fetch(`${apiBaseUrl}/createPost`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-
-        body: JSON.stringify({ text: newPostText }),
+        body: formData,
       });
 
       if (response.ok) {
         fetchFeedPosts();
         setNewPostText("");
+        setSelectedFile(null);
       } else {
         console.error("Failed to post:", response.statusText);
       }
@@ -58,6 +63,13 @@ const FeedComponent = () => {
           value={newPostText}
           onChange={(e) => setNewPostText(e.target.value)}
         />
+        <div className="feedPost_image">
+          <input
+            type="file"
+            onChange={(e) => setSelectedFile(e.target.files[0])}
+          />
+          <i className="fas fa-image"></i>
+        </div>
         <div className="feedPost_buttons">
           <button type="submit" className="btn btn-primary">
             Post

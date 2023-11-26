@@ -1,39 +1,48 @@
 
-.homePage_title{
+
+/* Style for the main feed container */
+.feedReel {
     display: flex;
     flex-direction: column;
-    width: 100% !important;
+    width: 90%;
+    max-width: 500px;
+    margin: 0 auto;
 }
 
-.feedReel{
-    display: flex ;
-    flex-direction: column;
-    margin-top: 20px;
-    background-color: #fff;
-    align-items: center;
-}
-.perReel{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 15px;
-    margin: 1%;
+/* Style for each individual post */
+.perReel {
     border: 1px solid #ccc;
-    box-shadow: 0 2px 2px rgba(0,0,0,0.3);
-    border-radius: 10px;
-    width: 30%;
+    margin-bottom: 16px;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
 }
-.feedReelOwner{
-    display: flex;
-    font-size: larger;
-    font-weight: bold;
-}
-.feedReelItem{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    width: 100%;
-    margin-top: 5%;
-    text-justify: auto;
 
+/* Style for the post owner's username */
+.feedReelOwner {
+    padding: 12px;
+    font-weight: bold;
+    border-bottom: 1px solid #eee;
+}
+
+/* Style for the post content and image */
+.feedReelItem {
+    padding: 12px;
+}
+
+/* Style for the post content */
+.feedReelItem p {
+    margin-bottom: 10px;
+}
+
+/* Style for the post image */
+.feedReelImage {
+    max-width: 100%;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+/* Optional: Hover effect for posts */
+.perReel:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
