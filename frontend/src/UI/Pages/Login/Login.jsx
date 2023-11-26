@@ -18,7 +18,7 @@ const LogIn = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:8000/login", {
+      const response = await fetch("http://localhost:8000/users/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -27,17 +27,17 @@ const LogIn = () => {
       });
 
       console.log("Response from server:", response);
-
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem("isLoggedIn", "true");
+        // Save user data to localStorage
+        localStorage.setItem("firstname", data.user.firstname);
+        localStorage.setItem("lastname", data.user.lastname);
+        localStorage.setItem("email", data.user.email);
         localStorage.setItem("token", data.token);
-        localStorage.setItem("userEmail", data.user.email);
-        localStorage.setItem("firstname", data.user.firstname); // Store the user's first name
-        localStorage.setItem("lastname", data.user.lastname); // Store the user's last name
-        setNotification("Login successful");
-        console.log("Login successful");
+        localStorage.setItem("userId", data.user.id);
+        // Navigate to HomePage
         navigate("/home");
+        console.log("Sign-up successful");
       } else {
         const data = await response.json();
         setNotification(data.error || "Email or Password not found");

@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
+import "./feedPost.css";
+import { useNavigate } from "react-router-dom"; // Use useNavigate from React Router
 
 const FeedComponent = () => {
   const [feedPosts, setFeedPosts] = useState([]);
   const [newPostText, setNewPostText] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const apiBaseUrl = "http://localhost:8000/api/posts";
+  const navigate = useNavigate(); // Use useNavigate instead of useHistory
 
   const fetchFeedPosts = async () => {
     try {
@@ -44,11 +47,16 @@ const FeedComponent = () => {
         fetchFeedPosts();
         setNewPostText("");
         setSelectedFile(null);
+        navigate("/home");
+        window.location.reload();
       } else {
         console.error("Failed to post:", response.statusText);
       }
     } catch (error) {
       console.error("Error posting:", error);
+    } finally {
+      // Programmatically navigate to "/home" using React Router v6
+      navigate("/home");
     }
   };
 
@@ -63,17 +71,19 @@ const FeedComponent = () => {
           value={newPostText}
           onChange={(e) => setNewPostText(e.target.value)}
         />
-        <div className="feedPost_image">
-          <input
-            type="file"
-            onChange={(e) => setSelectedFile(e.target.files[0])}
-          />
-          <i className="fas fa-image"></i>
-        </div>
-        <div className="feedPost_buttons">
-          <button type="submit" className="btn btn-primary">
-            Post
-          </button>
+        <div className="feedPost_image_buttons">
+          <div className="feedPost_image">
+            <input
+              type="file"
+              onChange={(e) => setSelectedFile(e.target.files[0])}
+            />
+            <i className="fas fa-image"></i>
+          </div>
+          <div className="feedPost_buttons">
+            <button type="submit" className="btn btn-primary">
+              Post
+            </button>
+          </div>
         </div>
       </form>
     </div>

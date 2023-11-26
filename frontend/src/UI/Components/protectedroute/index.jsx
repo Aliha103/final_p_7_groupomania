@@ -1,13 +1,15 @@
-import React from "react";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const PrivateRoute = ({ children }) => {
-  const user = localStorage.getItem("isLoggedIn"); // Check if the user is logged in
-  return user ? (
-    children
-  ) : (
-    <Navigate to="/login" replace state={{ from: window.location.pathname }} />
-  );
+const ProtectedRoute = ({ children }) => {
+  const user = localStorage.getItem("userId");
+  const navigate = useNavigate();
+
+  if (!user) {
+    navigate("/login");
+    return null;
+  }
+
+  return children;
 };
 
-export default PrivateRoute;
+export default ProtectedRoute;

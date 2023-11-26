@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import login__logo from "../../Assets/login__logo.png";
 import "./Signup.css";
 
@@ -8,6 +8,7 @@ const SignUp = () => {
   const [lastname, setlastname] = useState("");
   const [email, setemail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -26,7 +27,7 @@ const SignUp = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:8000/user/", {
+      const response = await fetch("http://localhost:8000/users/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -35,7 +36,14 @@ const SignUp = () => {
       });
 
       if (response.ok) {
-        // Handle a successful sign-up response here
+        const data = await response.json();
+        // Save user data to localStorage
+        localStorage.setItem("firstname", data.firstname);
+        localStorage.setItem("lastname", data.lastname);
+        localStorage.setItem("email", data.email);
+        localStorage.setItem("userId", data.id);
+        // Navigate to HomePage
+        navigate("/home");
         console.log("Sign-up successful");
       } else {
         // Handle an error response from your backend
