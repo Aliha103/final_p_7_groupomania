@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Header from "../../Components/Header/Header";
 import FeedPost from "../../Components/feedPost/feedPost";
+import Comments from "../../Components/Comment/comment";
 import "./HomePage.css";
 
 function HomePage() {
@@ -80,6 +81,8 @@ function HomePage() {
                   alt="Post"
                 />
               )}
+              {/* Display comments for each post */}
+              <Comments postId={post.id} />
             </div>
           </div>
         ))}
