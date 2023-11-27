@@ -66,9 +66,15 @@ exports.createComment = (req, res) => {
   });
 };
 
-// Get all comments for a specific post
+// Get all comments for a specific post with user and post owner information
 exports.getComments = (req, res) => {
-  const selectSQL = "SELECT * FROM comment WHERE postId = ?";
+  const selectSQL = `
+    SELECT c.*, u.id AS userId, u.firstname, u.lastname, p.userId AS postOwnerId
+    FROM comment c
+    JOIN user u ON c.userId = u.id
+    JOIN post p ON c.postId = p.id
+    WHERE c.postId = ?;
+  `;
   const params = [req.params.postId];
 
   db.all(selectSQL, params, (err, rows) => {
@@ -83,6 +89,7 @@ exports.getComments = (req, res) => {
     });
   });
 };
+
 
 // Update a comment by ID
 exports.updateComment = (req, res) => {

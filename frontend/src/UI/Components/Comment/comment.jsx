@@ -5,6 +5,13 @@ function Comment({ postId }) {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
 
+  const currentUser = {
+    userId: localStorage.getItem("userId"),
+    userName: `${localStorage.getItem("firstname")} ${localStorage.getItem(
+      "lastname"
+    )}`,
+  };
+
   const fetchComments = async () => {
     try {
       const res = await fetch(
@@ -55,19 +62,57 @@ function Comment({ postId }) {
     }
   };
 
+  const deleteComment = async (commentId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/comments/${commentId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to delete comment");
+      }
+
+      // Refetch comments after deleting a comment
+      fetchComments();
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+    }
+  };
+
   useEffect(() => {
     fetchComments();
   }, [postId]);
 
   return (
-    <div className="comment-section">
-      <h3 className="comment-heading">Comments:</h3>
-      {comments.map((comment) => (
-        <div key={comment.id} className="comment-container">
-          <p className="comment-content">{comment.content}</p>
-          <p className="comment-user">{comment.userName}</p>
-        </div>
-      ))}
+    <div>
+      <div className="comment-section">
+        <h3 className="comment-heading">Comments:</h3>
+        {comments.map((comment) => (
+          <div key={comment.id} className="comment-container">
+            <p className="comment-user">
+              {comment.firstname} {comment.lastname}
+            </p>
+            <p className="comment-content">{comment.content}</p>
+            {currentUser.userId == comment.userId ||
+            currentUser.userId == comment.postOwnerId ? (
+              <button
+                className="edit-comment-btn"
+                onClick={() => deleteComment(comment.id)}
+              >
+                Delete Comment
+              </button>
+            ) : null}
+          </div>
+        ))}
+      </div>
+
       <div className="add-comment-container">
         <input
           className="comment-input"

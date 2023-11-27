@@ -63,7 +63,6 @@ function HomePage() {
           <div className="perReel" key={post.id}>
             <div className="feedReelOwner">
               {post.userName}
-              {console.log(currentUser, post.userName)}
               {currentUser && currentUser.userName === post.userName && (
                 <div className="postOptions">
                   <div className="dropdownContent">

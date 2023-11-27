@@ -2,43 +2,62 @@
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
-}
-
-.comment-heading {
+  }
+  
+  .comment-heading {
     font-size: 1.5rem;
     margin-bottom: 10px;
-}
-
-.comment-container {
+  }
+  
+  .comment-container {
+    position: relative; /* Added position relative for button positioning */
     border: 1px solid #ccc;
     padding: 10px;
     margin-bottom: 10px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    /* Added box shadow */
-}
-
-.comment-content {
+  }
+  
+  .comment-content {
     margin: 0;
-}
-
-.comment-user {
+  }
+  
+  .comment-user {
     color: #555;
-}
-
-.add-comment-container {
+  }
+  
+  .delete-comment-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 5px 10px;
+    background-color: #ff5555;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .delete-comment-btn:hover {
+    background-color: #d42020;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .add-comment-container {
     margin-top: 20px;
-}
-
-.comment-input {
+  }
+  
+  .comment-input {
     width: 70%;
     padding: 8px;
     margin-right: 10px;
     border: 1px solid #ccc;
     border-radius: 8px;
-}
-
-.add-comment-btn {
+  }
+  
+  .add-comment-btn {
     padding: 8px 15px;
     background-color: #007bff;
     color: #fff;
@@ -46,14 +65,11 @@
     cursor: pointer;
     border-radius: 8px;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    /* Added box shadow transition */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    /* Added box shadow */
-}
-
-.add-comment-btn:hover {
+  }
+  
+  .add-comment-btn:hover {
     background-color: #004080;
-    /* Slightly darker color on hover */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    /* Increased box shadow on hover */
-}
+  }
+  
