@@ -1,6 +1,5 @@
 import React from "react";
 import "./Header.css";
-import { Search, Email, Notifications, Person } from "@mui/icons-material";
 import logo from "../../Assets/logo2.png";
 import DropDown from "../dropdown/DropDown";
 

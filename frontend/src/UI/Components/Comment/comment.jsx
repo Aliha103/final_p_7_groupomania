@@ -103,10 +103,10 @@ function Comment({ postId }) {
             {currentUser.userId == comment.userId ||
             currentUser.userId == comment.postOwnerId ? (
               <button
-                className="edit-comment-btn"
+                className="delete-comment-btn"
                 onClick={() => deleteComment(comment.id)}
               >
-                Delete Comment
+                Delete
               </button>
             ) : null}
           </div>

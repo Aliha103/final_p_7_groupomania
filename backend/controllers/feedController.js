@@ -22,7 +22,7 @@ exports.createPost = (req, res) => {
 
   const token = authorizationHeader.split(" ")[1];
 
-  jwt.verify(token, "Sp08bce011", (err, decodedToken) => {
+  jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
     if (err) {
       console.error("Error verifying token:", err);
       // Handle token verification errors here

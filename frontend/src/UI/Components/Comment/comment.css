@@ -28,7 +28,7 @@
   
   .delete-comment-btn {
     position: absolute;
-    top: 5px;
+    bottom: 5px;
     right: 5px;
     padding: 5px 10px;
     background-color: #ff5555;

@@ -1,0 +1,8 @@
+.env
+.node_modules
+```
+I have tried to add the following to my .gitignore file:
+```bash
+# Ignore all files in this directory
+/node_modules/*
+```
