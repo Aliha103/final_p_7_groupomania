@@ -6,6 +6,8 @@ This project is part of the web development course offered by OpenClassrooms. Th
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
+**## EDIT YOUR .ENV FILE BEFORE RUNNING PROJECT**
+
 ### Prerequisites
 
 Ensure that you have Node.js version `21.1.0` installed on your system. To check your node version, run the following command:
@@ -30,7 +32,6 @@ The frontend of the application will be live at localhost:3000.
 Backend
 To start the backend of the application, first ensure you have nodemon installed globally. If not, you can install it using:
 
-**## EDIT YOUR .ENV FILE BEFORE RUNNING PROJECT**
 
 npm install -g nodemon
 Then, navigate to the backend directory and run:
