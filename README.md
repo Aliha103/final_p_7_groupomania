@@ -28,17 +28,19 @@ To start the frontend of the application, navigate to the frontend directory and
 
 npm run start
 The frontend of the application will be live at localhost:3000.
+```
 
-Backend
+# Backend
 To start the backend of the application, first ensure you have nodemon installed globally. If not, you can install it using:
 
 
+```bash
 npm install -g nodemon
 Then, navigate to the backend directory and run:
 
 npx nodemon server.js
 The backend of the application will be live at localhost:8000.
-
+```
 
 ![Screenshot (26)](https://github.com/Aliha103/final_p_7_groupomania/assets/78868770/32fc14c0-ce87-44f9-9e48-8fc19d785fe5)
 
