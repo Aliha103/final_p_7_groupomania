@@ -30,6 +30,8 @@ The frontend of the application will be live at localhost:3000.
 Backend
 To start the backend of the application, first ensure you have nodemon installed globally. If not, you can install it using:
 
+**## EDIT YOUR .ENV FILE BEFORE RUNNING PROJECT**
+
 npm install -g nodemon
 Then, navigate to the backend directory and run:
 
